@@ -1,0 +1,119 @@
+@-moz-document url-prefix("about:reader") {
+  /* to use the custom schemes add them in about:config (reader.color_scheme.values) */
+  body.custom1,
+  label.custom1-button,
+  label.custom1-button::before {
+    /* webnovel dark */
+    background-color: #1f2129 !important;
+    color: #83848f !important;
+  }
+
+  body.custom2,
+  label.custom2-button,
+  label.custom2-button::before {
+    /* random */
+    background-color: #26041d !important;
+    color: #8496a1 !important;
+  }
+
+  body.custom3,
+  label.custom3-button,
+  label.custom3-button::before {
+    /* random */
+    background-color: #000000 !important;
+    color: #178cd0 !important;
+  }
+
+  body.custom4,
+  label.custom4-button,
+  label.custom4-button::before {
+    background-color: #000000 !important;
+    color: #d05c17 !important;
+  }
+
+  body.custom5,
+  label.custom5-button,
+  label.custom5-button::before {
+    background-color: #041e26 !important;
+    color: #d619a4 !important;
+  }
+
+  body.custom3 ::selection {
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: rgb(190, 104, 131) !important;
+  }
+
+  label.custom1-button::before {
+    content: "custom1";
+  }
+
+  label.custom2-button::before {
+    content: "custom2";
+  }
+
+  label.custom3-button::before {
+    content: "custom3";
+  }
+
+  /* Put the toolbar back at the left */
+  .toolbar {
+    margin-left: 30px !important;
+    opacity: 0;
+    transition: opacity 1s ease-out !important;
+  }
+
+  .toolbar:hover {
+    opacity: 1;
+    transition: opacity 1s ease-out !important;
+  }
+
+  .toolbar {
+    /* border: none !important; */
+    background-color: #161825 !important;
+    /* width: 40px !important; */
+  }
+
+  button {
+    fill: white !important;
+    background-color: transparent !important;
+    border: none !important;
+  }
+
+  button:hover {
+    background-color: #1e90ff !important;
+  }
+
+  .dropdown-popup {
+    background-color: #0c1a3f !important;
+    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 0px !important;
+    border: none !important;
+    opacity: 0 !important;
+    transition: opacity 150ms, visibility 0s 2s !important;
+  }
+
+  .dropdown-popup label[class$="serif-button"] {
+    color: rgb(203, 200, 200) !important;
+  }
+
+  .open > .dropdown-popup {
+    opacity: 1 !important;
+    transition: opacity 150ms !important;
+  }
+
+  .dropdown-arrow {
+    display: none !important;
+  }
+
+  .dropdown.open {
+    background-color: #1e90ff !important;
+  }
+
+  .narrate-row:not(:first-child) {
+    border: none !important;
+  }
+
+  font-type-buttons > button > .description {
+    color: #bebebe !important;
+  }
+}
