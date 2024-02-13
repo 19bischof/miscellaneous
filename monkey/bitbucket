@@ -1,0 +1,138 @@
+// ==UserScript==
+// @name         Arrow Key Clicker
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Click a Button element when the right or left arrow key is pressed
+// @author       You
+// @match        https://bitbucket.org/check24/*/pull-requests/*
+// @require https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
+// @grant        none
+// ==/UserScript==
+
+
+let rightButton;
+let leftButton;
+let viewedButton;
+
+const scrollValue = 200;
+const scrollDown = {top: -scrollValue,left: 0,behavior: "smooth",};
+const scrollUp = {top: scrollValue,left: 0,behavior: "smooth",};
+const storageKey = location.href.split('/')[location.href.split('/').length - 1] + '-commits'
+
+
+function getViewedButton() {
+  return viewedButton && document.contains(viewedButton) ? viewedButton : document.querySelector('input[type="checkbox"][name="controlled-checkbox"]');
+}
+function getRightButton() {
+  return rightButton && document.contains(rightButton) ?  rightButton : document.querySelector('button[type="button"][aria-label="Next file"]');
+}
+function getLeftButton() {
+  return leftButton && document.contains(leftButton) ?  leftButton : document.querySelector('button[type="button"][aria-label="Previous file"]');
+}
+function getApprove() {
+  return document.querySelector('[aria-label="Approve this pull request"]');
+}
+function getRequestChanges() {
+  return document.querySelector('[aria-label="Remove changes requested state from this pull request"]')
+}
+function getCommits() {
+  return [...document.querySelectorAll('[data-qa^=commit-hash-wrapper] a span')]
+}
+
+
+(function() {
+    'use strict';
+
+
+    function handleKeyPress(event) {
+        if (event.target !== document.body) {
+          return;
+        }
+
+        if (event.key === "ArrowRight" || event.key === "l") {
+            rightButton = getRightButton();
+            viewedButton = getViewedButton();
+
+            if (viewedButton && viewedButton.checked === false) {
+                viewedButton.click();
+            }
+            if (rightButton) {
+                rightButton.click();
+            } else {
+              console.error('The Buttons have changed!');
+            }
+        }
+
+
+        else if (event.key === "ArrowLeft" || event.key === "h") {
+            leftButton = getLeftButton();
+            viewedButton = getViewedButton();
+
+            if (viewedButton && viewedButton.checked === false) {
+                viewedButton.click();
+            }
+            if (leftButton) {
+                leftButton.click();
+            } else {
+              console.error('The Buttons have changed!')
+            }
+        }
+
+        else if (event.key === "j") {
+            window.scrollBy(scrollUp);
+        }
+
+        else if (event.key === 'k') {
+          window.scrollBy(scrollDown);
+        }
+    }
+
+  function handleFinishReview(event) {
+    console.log('review finished');
+    localStorage.setItem(storageKey, JSON.stringify(getCommits().map(a => a.textContent)));
+    console.log(JSON.parse(localStorage.getItem(storageKey)));
+  }
+
+
+  document.addEventListener('keydown', handleKeyPress);
+
+
+  VM.observe(document.body, () => {
+  // Find the target node
+  const node = getApprove();
+
+  if (!node) return;
+
+  node.addEventListener('click', handleFinishReview);
+
+    // disconnect observer
+  // return true;
+
+});
+  VM.observe(document.body, () => {
+  // Find the target node
+  const node = getRequestChanges();
+
+  if (!node) return;
+
+  node.addEventListener('click', handleFinishReview);
+
+    // disconnect observer
+  // return true;
+
+});
+  VM.observe(document.body, () => {
+    const node = getCommits();
+    if (node.length === 0) return;
+
+    const reviewed = JSON.parse(localStorage.getItem(storageKey));
+
+    node.filter(n => reviewed.includes(n.textContent)).forEach(n => {
+      n.style = "color:red !important";
+    });
+
+  // no disconnect
+  });
+
+})();
+
