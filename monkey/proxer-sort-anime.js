@@ -1,9 +1,10 @@
 // ==UserScript==
-// @name        Sort Animes by reviews
+// @name        sort-animes-by-rewiews
 // @namespace   Violentmonkey Scripts
 // @match       https://proxer.me/*
 // @grant       none
-// @require https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
+// @run-at      document-body
 // @version     1.0
 // @author      -
 // @description 15.1.2024, 00:18:38
@@ -18,6 +19,12 @@ VM.observe(document.body, () => {
   const parent = document.querySelector('#seasonEntries > div');
   if (!parent) return;
   const sorted = [...parent.children].sort((a,b) => extractOrder(b) - extractOrder(a));
-  sorted.forEach(node => parent.appendChild(node))
-  return true;
+
+  const noChange = sorted.every(((e,i) => {
+    return e === parent.children[i];
+  }));
+  if (noChange) return;
+
+  sorted.forEach(node => parent.appendChild(node));
+  // no disconnect
 });
