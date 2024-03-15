@@ -15,6 +15,11 @@ const oldContentAttribute = "old-content-data";
 const mutationCallback = function (mutationsList, observer) {
     for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
+            // Enable text selection
+            document.body.style.userSelect = 'auto';
+
+            // Enable right-click
+            document.oncontextmenu = null;
             // New nodes have been added or removed
             mutation.addedNodes.forEach((node) => {
                 if (!node.classList?.contains('chapter_content')) return;
@@ -44,9 +49,26 @@ observer.observe(document.body, {
     subtree: true,
 });
 
-var css = `p.hoverable span:hover{
-  color: lightcoral !important;
-}`;
+var css = `
+p.hoverable span:hover{
+    color: lightcoral !important;
+}
+
+* {
+    user-select: auto !important;
+}
+::selection {
+    background-color: transparent !important;
+}
+
+::-moz-selection {
+    background-color: transparent !important;
+}
+
+p.hoverable span::selection {
+    color: deepskyblue !important;
+}
+  `;
 
 var style = document.createElement("style");
 style.innerText = css;
