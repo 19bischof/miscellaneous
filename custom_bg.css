@@ -1,0 +1,17 @@
+.ChapterContentSection {
+  background-image: url("https://wallpaperaccess.com//full/759786.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+
+.ChapterContentSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 139, 0.2); /* Dark blue tint with 50% opacity */
+  z-index: 0; /* Place it above the background but below the content */
+}
